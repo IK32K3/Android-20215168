@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <!-- Layout cho đồng tiền nguồn -->
+    <LinearLayout
+        android:id="@+id/sourceLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentTop="true">
+
+        <!-- EditText để nhập số tiền nguồn -->
+        <EditText
+            android:id="@+id/sourceCurrencyEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Số tiền nguồn"
+            android:inputType="numberDecimal"
+            android:padding="8dp"
+            android:background="@android:drawable/editbox_background"
+            android:gravity="center_vertical" />
+
+        <!-- Spinner để chọn loại tiền nguồn -->
+        <Spinner
+            android:id="@+id/sourceCurrencySpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_gravity="center_vertical"
+            android:padding="8dp" />
+    </LinearLayout>
+
+    <!-- Layout cho đồng tiền đích -->
+    <LinearLayout
+        android:id="@+id/targetLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@id/sourceLayout"
+        android:layout_marginTop="16dp">
+
+        <!-- EditText để hiển thị số tiền đã chuyển đổi -->
+        <EditText
+            android:id="@+id/targetCurrencyEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Số tiền đích"
+            android:inputType="none"
+            android:padding="8dp"
+            android:background="@android:drawable/editbox_background"
+            android:gravity="center_vertical"
+            android:editable="false"
+            android:focusable="false" />
+
+        <!-- Spinner để chọn loại tiền đích -->
+        <Spinner
+            android:id="@+id/targetCurrencySpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_gravity="center_vertical"
+            android:padding="8dp" />
+    </LinearLayout>
+</RelativeLayout>
