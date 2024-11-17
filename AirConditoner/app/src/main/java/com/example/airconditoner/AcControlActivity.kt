@@ -18,7 +18,7 @@ class AcControlActivity : AppCompatActivity() {
 
         val preferencesHelper = PreferencesHelper(this)
         esp32Ip = preferencesHelper.getEsp32Ip() ?: run {
-            finish()  // Nếu không có địa chỉ ESP32, quay lại màn hình trước
+            finish()  
             return
         }
 
