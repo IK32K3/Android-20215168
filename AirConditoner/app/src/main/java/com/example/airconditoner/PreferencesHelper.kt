@@ -1,67 +1,29 @@
-package com.example.airconditoner
+package com.example.airconditioner
 
-import android.content.Intent
-import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import okhttp3.*
-import java.io.IOException
+import android.content.Context
+import android.content.SharedPreferences
 
-class ConnectEspActivity : AppCompatActivity() {
-    private lateinit var preferencesHelper: PreferencesHelper
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_connect_esp)
-
-        preferencesHelper = PreferencesHelper(this)
-
-        val etEspIp = findViewById<EditText>(R.id.etEspIp)
-        val btnConnect = findViewById<Button>(R.id.btnConnect)
-
-        // Nút kết nối
-        btnConnect.setOnClickListener {
-            val ipAddress = etEspIp.text.toString().trim()
-            if (ipAddress.isEmpty()) {
-                Toast.makeText(this, "Vui lòng nhập địa chỉ IP", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-
-            // Kiểm tra kết nối tới ESP32
-            testConnectionToEsp(ipAddress) { success ->
-                runOnUiThread {
-                    if (success) {
-                        preferencesHelper.setEsp32Ip(ipAddress) // Lưu IP ESP32
-                        Toast.makeText(this, "Kết nối thành công!", Toast.LENGTH_SHORT).show()
-
-                        // Chuyển sang giao diện chọn điều hòa
-                        val intent = Intent(this, AcListActivity::class.java)
-                        startActivity(intent)
-                        finish()
-                    } else {
-                        Toast.makeText(this, "Kết nối thất bại. Vui lòng kiểm tra IP.", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
-        }
+class PreferencesHelper(context: Context) {
+    companion object {
+        private const val PREFS_NAME = "ac_preferences"
+        private const val KEY_ESP32_IP = "esp32_ip"
     }
 
-    private fun testConnectionToEsp(ip: String, callback: (Boolean) -> Unit) {
-        val url = "http://$ip/test_connection" // API test_connection trên ESP32
-        val client = OkHttpClient()
-        val request = Request.Builder().url(url).get().build()
+    private val sharedPreferences: SharedPreferences =
+        context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
-        client.newCall(request).enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-                e.printStackTrace()
-                callback(false)
-            }
+    // Lưu địa chỉ IP của ESP32
+    fun setEsp32Ip(ip: String) {
+        sharedPreferences.edit().putString(KEY_ESP32_IP, ip).apply()
+    }
 
-            override fun onResponse(call: Call, response: Response) {
-                callback(response.isSuccessful)
-            }
-        })
+    // Lấy địa chỉ IP của ESP32
+    fun getEsp32Ip(): String? {
+        return sharedPreferences.getString(KEY_ESP32_IP, null)
+    }
+
+    // Xóa địa chỉ IP của ESP32
+    fun clearEsp32Ip() {
+        sharedPreferences.edit().remove(KEY_ESP32_IP).apply()
     }
 }
